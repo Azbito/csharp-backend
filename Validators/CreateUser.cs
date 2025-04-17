@@ -8,5 +8,6 @@ public class CreateUserValidator : AbstractValidator<CreateUser>
         RuleFor(x => x.Name).NotEmpty();
         RuleFor(x => x.Email).EmailAddress();
         RuleFor(x => x.Password).MinimumLength(6);
+        RuleFor(x => x.UserName).MinimumLength(5);
     }
 }
