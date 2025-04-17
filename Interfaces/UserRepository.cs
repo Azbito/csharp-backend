@@ -9,5 +9,5 @@ public interface IUserRepository
     IEnumerable<User> GetAll();
     User? GetById(Guid id);
     User? GetByEmail(string email);
-    UserData? GetByUsername(string username);
+    UserResponse? GetByUsername(string username);
 }

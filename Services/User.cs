@@ -1,8 +1,6 @@
 using backend.DTOs;
 using backend.Interfaces;
 using backend.Models;
-using backend.Repositories;
-using BCrypt.Net;
 
 namespace backend.Services;
 
@@ -15,48 +13,30 @@ public class UserService : IUserService
         _repository = repository;
     }
 
-    public User Create(CreateUser dto)
+    public User? Create(CreateUser dto)
     {
-        try
+        var existingUser = _repository.GetByUsername(dto.UserName);
+
+        if (existingUser != null)
+            return null;
+
+        var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
+        var user = new User
         {
-            if (
-                string.IsNullOrEmpty(dto.Password)
-                || string.IsNullOrEmpty(dto.Email)
-                || string.IsNullOrEmpty(dto.Name)
-            )
-            {
-                throw new ArgumentException("All the fields must have a value.");
-            }
+            Name = dto.Name,
+            Email = dto.Email,
+            Password = passwordHash,
+            UserName = dto.UserName,
+        };
 
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-
-            var user = new User
-            {
-                Name = dto.Name,
-                Email = dto.Email,
-                Password = passwordHash,
-                UserName = dto.UserName,
-            };
-
-            _repository.Add(user);
-
-            return user;
-        }
-        catch (ArgumentException ex)
-        {
-            Console.WriteLine($"Input error: {ex.Message}");
-            throw;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error while creating user: {ex.Message}");
-            throw;
-        }
+        _repository.Add(user);
+        return user;
     }
 
     public IEnumerable<User> GetUsers() => _repository.GetAll();
 
     public User? GetUserById(Guid id) => _repository.GetById(id);
 
-    public UserData? GetUserByUsername(string username) => _repository.GetByUsername(username);
+    public UserResponse? GetUserByUsername(string username) => _repository.GetByUsername(username);
 }

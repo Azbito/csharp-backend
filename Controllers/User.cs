@@ -16,7 +16,21 @@ public class UserController : IUserControllers
 
     public IResult CreateUser(CreateUser dto)
     {
+        var validator = new CreateUserValidator();
+        var validationResult = validator.Validate(dto);
+
+        if (!validationResult.IsValid)
+        {
+            var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+            return Results.BadRequest(new { message = "❌ Validation failed", errors });
+        }
+
         var user = _service.Create(dto);
+
+        if (user == null)
+        {
+            return Results.Conflict(new { message = "❌ User already exists" });
+        }
 
         var result = new
         {
@@ -24,6 +38,8 @@ public class UserController : IUserControllers
             user.Name,
             user.Email,
             user.UserName,
+            user.CreatedAt,
+            user.UpdatedAt,
         };
 
         return Results.Created($"/users/{user.Id}", result);

@@ -1,4 +1,3 @@
-using System.Collections;
 using backend.DTOs;
 using backend.Models;
 
@@ -6,7 +5,7 @@ namespace backend.Interfaces;
 
 public interface IUserService
 {
-    User Create(CreateUser dto);
+    User? Create(CreateUser dto);
     IEnumerable<User> GetUsers();
     User? GetUserById(Guid id);
 }

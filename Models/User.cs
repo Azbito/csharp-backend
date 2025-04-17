@@ -7,4 +7,6 @@ public class User
     public string Email { get; set; } = string.Empty;
     public string? Password { get; set; } = string.Empty;
     public string UserName { get; set; } = string.Empty;
+    public string CreatedAt { get; set; } = string.Empty;
+    public string UpdatedAt { get; set; } = string.Empty;
 }

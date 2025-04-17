@@ -36,14 +36,14 @@ public class UserRepository : IUserRepository
         return _context.Users.FirstOrDefault(u => u.Email == email);
     }
 
-    public UserData? GetByUsername(string username)
+    public UserResponse? GetByUsername(string username)
     {
         var user = _context.Users.FirstOrDefault(u => u.UserName == username);
 
         if (user == null)
             return null;
 
-        var userDto = new UserData
+        var userDto = new UserResponse
         {
             UserName = user.UserName,
             Name = user.Name,
