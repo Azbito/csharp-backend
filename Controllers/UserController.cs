@@ -1,15 +1,14 @@
 using backend.DTOs;
 using backend.Interfaces;
-using backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
 
-public class UserController : IUserControllers
+public class UserController : IUserController
 {
-    private readonly UserService _service;
+    private readonly IUserService _service;
 
-    public UserController(UserService service)
+    public UserController(IUserService service)
     {
         _service = service;
     }

@@ -2,7 +2,7 @@ using backend.DTOs;
 
 namespace backend.Interfaces;
 
-public interface IUserControllers
+public interface IUserController
 {
     IResult CreateUser(DTOCreateUser dto);
     IResult GetAllUsers();

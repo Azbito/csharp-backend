@@ -11,4 +11,5 @@ public interface IUserService
     User CreateFromOAuth(string name, string email);
     User? GetByEmail(string email);
     string GenerateJwt(User user);
+    UserResponse? GetUserByUsername(string username);
 }

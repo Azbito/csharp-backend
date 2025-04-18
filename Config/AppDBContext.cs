@@ -15,6 +15,7 @@ namespace backend.Config
         }
 
         public DbSet<User> Users => Set<User>();
+        public DbSet<Post> Posts => Set<Post>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,7 +36,7 @@ namespace backend.Config
                     }
                     else
                     {
-                        property.SetColumnName(_utils.ToSnakeCase(property.Name));
+                        property.SetColumnName(_utils.StringCase.ToSnakeCase(property.Name));
                     }
                 }
             }
