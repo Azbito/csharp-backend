@@ -6,6 +6,6 @@ public interface IUserControllers
 {
     IResult CreateUser(CreateUser dto);
     IResult GetAllUsers();
-    IResult GetUserById(Guid id);
+    IResult GetUserById(string id);
     IResult GetUserByUsername(string username);
 }

@@ -36,7 +36,7 @@ public class UserService : IUserService
 
     public IEnumerable<User> GetUsers() => _repository.GetAll();
 
-    public User? GetUserById(Guid id) => _repository.GetById(id);
+    public User? GetUserById(string id) => _repository.GetById(id);
 
     public UserResponse? GetUserByUsername(string username) => _repository.GetByUsername(username);
 }

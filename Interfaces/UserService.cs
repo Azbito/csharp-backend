@@ -7,5 +7,5 @@ public interface IUserService
 {
     User? Create(CreateUser dto);
     IEnumerable<User> GetUsers();
-    User? GetUserById(Guid id);
+    User? GetUserById(string id);
 }

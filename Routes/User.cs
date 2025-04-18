@@ -21,7 +21,7 @@ public static class UserRoutes
 
         app.MapGet(
             "/users/id/{id}",
-            ([FromServices] UserController controller, Guid id) => controller.GetUserById(id)
+            ([FromServices] UserController controller, string id) => controller.GetUserById(id)
         );
 
         app.MapGet(

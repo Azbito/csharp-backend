@@ -59,7 +59,7 @@ public class UserController : IUserControllers
         return Results.Ok(users);
     }
 
-    public IResult GetUserById(Guid id)
+    public IResult GetUserById(string id)
     {
         var user = _service.GetUserById(id);
         if (user is null)

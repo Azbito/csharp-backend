@@ -2,7 +2,6 @@ using backend.Config;
 using backend.DTOs;
 using backend.Interfaces;
 using backend.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories;
 
@@ -26,7 +25,7 @@ public class UserRepository : IUserRepository
         return _context.Users.ToList();
     }
 
-    public User? GetById(Guid id)
+    public User? GetById(string id)
     {
         return _context.Users.FirstOrDefault(u => u.Id == id);
     }
@@ -45,6 +44,7 @@ public class UserRepository : IUserRepository
 
         var userDto = new UserResponse
         {
+            Id = user.Id,
             UserName = user.UserName,
             Name = user.Name,
             Email = user.Email,

@@ -4,6 +4,7 @@ using backend.Interfaces;
 using backend.Repositories;
 using backend.Routes;
 using backend.Services;
+using backend.Utils;
 using DotNetEnv;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<UserController>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
+builder.Services.AddScoped<IUtils, Utils>();
 
 builder.Services.AddControllers();
 
