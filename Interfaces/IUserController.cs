@@ -4,7 +4,7 @@ namespace backend.Interfaces;
 
 public interface IUserControllers
 {
-    IResult CreateUser(CreateUser dto);
+    IResult CreateUser(DTOCreateUser dto);
     IResult GetAllUsers();
     IResult GetUserById(string id);
     IResult GetUserByUsername(string username);

@@ -13,7 +13,7 @@ public class UserService : IUserService
         _repository = repository;
     }
 
-    public User? Create(CreateUser dto)
+    public User? Create(DTOCreateUser dto)
     {
         var existingUser = _repository.GetByUsername(dto.UserName);
 

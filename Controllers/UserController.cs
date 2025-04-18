@@ -14,7 +14,7 @@ public class UserController : IUserControllers
         _service = service;
     }
 
-    public IResult CreateUser(CreateUser dto)
+    public IResult CreateUser(DTOCreateUser dto)
     {
         var validator = new CreateUserValidator();
         var validationResult = validator.Validate(dto);

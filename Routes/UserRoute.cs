@@ -10,7 +10,7 @@ public static class UserRoutes
     {
         app.MapPost(
             "/users",
-            ([FromServices] UserController controller, [FromBody] CreateUser dto) =>
+            ([FromServices] UserController controller, [FromBody] DTOCreateUser dto) =>
                 controller.CreateUser(dto)
         );
 

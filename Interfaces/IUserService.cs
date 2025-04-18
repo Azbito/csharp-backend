@@ -5,7 +5,7 @@ namespace backend.Interfaces;
 
 public interface IUserService
 {
-    User? Create(CreateUser dto);
+    User? Create(DTOCreateUser dto);
     IEnumerable<User> GetUsers();
     User? GetUserById(string id);
 }
