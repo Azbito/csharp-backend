@@ -9,11 +9,26 @@ public static class PostRoutes
     public static void MapPostRoutes(this WebApplication app)
     {
         app.MapPost(
-            "/post",
-            ([FromServices] PostController controller, [FromBody] DTOCreatePost body) =>
-            {
-                controller.CreatePost(body);
-            }
-        );
+                "/publish",
+                (
+                    HttpContext http,
+                    [FromServices] PostController controller,
+                    [FromBody] DTOCreatePost body
+                ) =>
+                {
+                    var userIdClaim =
+                        http.User.FindFirst("sub")?.Value ?? http.User.FindFirst("id")?.Value;
+
+                    if (userIdClaim == null)
+                    {
+                        return Results.Unauthorized();
+                    }
+
+                    var authorId = userIdClaim;
+
+                    return controller.CreatePost(body, authorId);
+                }
+            )
+            .RequireAuthorization();
     }
 }

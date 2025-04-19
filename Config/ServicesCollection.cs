@@ -5,31 +5,27 @@ using backend.Services;
 using backend.Utils;
 using FluentValidation;
 
-namespace backend.Extensions
+namespace backend.Extensions;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static IServiceCollection AddAppServices(this IServiceCollection services)
     {
-        public static IServiceCollection AddAppServices(this IServiceCollection services)
-        {
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IPostRepository, PostRepository>();
-            services.AddScoped<IStringCase, StringCase>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IPostRepository, PostRepository>();
+        services.AddScoped<IStringCase, StringCase>();
 
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IPostService, PostService>();
-            services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IPostService, PostService>();
+        services.AddScoped<IAuthService, AuthService>();
 
-            services.AddScoped<IUserController, UserController>();
-            services.AddScoped<IPostController, PostController>();
-            services.AddScoped<AuthController>();
+        services.AddScoped<UserController>();
+        services.AddScoped<AuthController>();
+        services.AddScoped<PostController>();
 
-            services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
+        services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
+        services.AddScoped<IUtils, backend.Utils.Utils>();
 
-            services.AddScoped<IUtils, backend.Utils.Utils>();
-
-            services.AddControllers();
-
-            return services;
-        }
+        return services;
     }
 }

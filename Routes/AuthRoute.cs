@@ -1,4 +1,5 @@
 using backend.Controllers;
+using backend.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Routes;
@@ -17,6 +18,12 @@ public static class AuthRoutes
             "/auth/google/callback",
             async ([FromServices] AuthController controller, HttpContext context) =>
                 await controller.HandleGoogleCallback(context)
+        );
+
+        app.MapPost(
+            "/auth",
+            ([FromServices] AuthController controller, [FromBody] DTOLogin dto) =>
+                controller.Login(dto)
         );
     }
 }

@@ -1,3 +1,4 @@
+using backend.DTOs;
 using backend.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -12,6 +13,33 @@ public class AuthService : IAuthService
     public AuthService(IUserService userService)
     {
         _userService = userService;
+    }
+
+    public IResult Login(DTOLogin dto)
+    {
+        var user = _userService.GetByEmail(dto.Email);
+
+        if (user == null)
+            return Results.Unauthorized();
+
+        if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
+            return Results.Unauthorized();
+
+        var token = _userService.GenerateJwt(user);
+
+        return Results.Ok(
+            new
+            {
+                message = "✅ Login successful",
+                user = new
+                {
+                    user.Id,
+                    user.Name,
+                    user.Email,
+                },
+                token,
+            }
+        );
     }
 
     public IResult LoginWithGoogle(HttpContext context)

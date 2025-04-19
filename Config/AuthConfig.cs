@@ -1,55 +1,69 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 
-namespace backend.Config
+public static class AuthenticationConfig
 {
-    public static class AuthenticationConfig
+    public static IServiceCollection AddAuthenticationConfig(this IServiceCollection services)
     {
-        public static IServiceCollection AddAuthenticationConfig(this IServiceCollection services)
-        {
-            services
-                .AddAuthentication(options =>
+        services
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = true;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(options =>
-                {
-                    options.RequireHttpsMetadata = true;
-                    options.SaveToken = true;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidIssuer = Environment.GetEnvironmentVariable("GOOGLE_ISSUER"),
-                        ValidAudience = Environment.GetEnvironmentVariable("GOOGLE_AUDIENCE"),
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(
-                                Environment.GetEnvironmentVariable("JWT_KEY") ?? ""
-                            )
-                        ),
-                    };
-                })
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/auth/google";
-                    options.LogoutPath = "/auth/logout";
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                })
-                .AddGoogle(options =>
-                {
-                    options.ClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID") ?? "";
-                    options.ClientSecret =
-                        Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET") ?? "";
-                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.Scope.Add("email");
-                });
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY") ?? "")
+                    ),
+                };
 
-            return services;
-        }
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        return Task.CompletedTask;
+                    },
+                    OnTokenValidated = context =>
+                    {
+                        var userClaims = context.Principal?.Claims;
+                        return Task.CompletedTask;
+                    },
+                };
+            })
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/auth/google";
+                options.LogoutPath = "/auth/logout";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            })
+            .AddGoogle(options =>
+            {
+                options.ClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID") ?? "";
+                options.ClientSecret =
+                    Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET") ?? "";
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.Scope.Add("email");
+            });
+
+        services.AddAuthorization(options =>
+        {
+            options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build();
+        });
+
+        return services;
     }
 }

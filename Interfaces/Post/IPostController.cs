@@ -4,5 +4,5 @@ namespace backend.Interfaces;
 
 public interface IPostController
 {
-    IResult CreatePost(DTOCreatePost dto);
+    IResult CreatePost(DTOCreatePost dto, string authorId);
 }

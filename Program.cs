@@ -7,6 +7,7 @@ Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthenticationConfig();
+builder.Services.AddAuthorization();
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddAppServices();
 

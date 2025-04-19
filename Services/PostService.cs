@@ -6,24 +6,33 @@ namespace backend.Services;
 
 public class PostService : IPostService
 {
-    private readonly IPostRepository _repository;
+    private readonly IPostRepository _postRepository;
+    private readonly IUserRepository _userRepository;
 
-    public PostService(IPostRepository repository)
+    public PostService(IPostRepository repository, IUserRepository userRepository)
     {
-        _repository = repository;
+        _postRepository = repository;
+        _userRepository = userRepository;
     }
 
-    public Post Create(DTOCreatePost dto)
+    public Post? Create(DTOCreatePost dto, string authorId)
     {
+        var user = _userRepository.GetById(authorId);
+
+        if (user == null)
+        {
+            return null;
+        }
+
         var post = new Post
         {
             Title = dto.Title,
             Description = dto.Description,
-            AuthorId = dto.AuthorId,
+            AuthorId = authorId,
             Attachments = dto.Attachments,
         };
 
-        _repository.Add(post);
+        _postRepository.Add(post);
 
         return post;
     }

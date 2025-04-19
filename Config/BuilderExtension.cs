@@ -7,8 +7,9 @@ namespace backend.Extensions
         public static WebApplication UseAppRoutes(this WebApplication app)
         {
             app.MapUserRoutes();
-            app.MapAuthRoutes();
             app.MapPostRoutes();
+            app.MapAuthRoutes();
+
             return app;
         }
     }

@@ -20,11 +20,17 @@ namespace backend.Config
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("users");
+            modelBuilder.Entity<Post>().ToTable("posts");
 
             modelBuilder
                 .Entity<User>()
                 .Property(u => u.Id)
                 .HasDefaultValueSql("CONCAT('U-', SUBSTRING(CONVERT(VARCHAR(36), NEWID()), 1, 8))");
+
+            modelBuilder
+                .Entity<Post>()
+                .Property(u => u.Id)
+                .HasDefaultValueSql("CONCAT('P-', SUBSTRING(CONVERT(VARCHAR(36), NEWID()), 1, 8))");
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {

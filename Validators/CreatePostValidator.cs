@@ -7,6 +7,5 @@ public class CreatePostValidator : AbstractValidator<DTOCreatePost>
     {
         RuleFor(c => c.Title).NotEmpty();
         RuleFor(c => c.Description).NotEmpty();
-        RuleFor(c => c.AuthorId).NotEmpty();
     }
 }

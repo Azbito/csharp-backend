@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
 
-public class UserController : IUserController
+public class UserController : ControllerBase, IUserController
 {
     private readonly IUserService _service;
 

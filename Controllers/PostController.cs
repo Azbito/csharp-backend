@@ -1,9 +1,10 @@
 using backend.DTOs;
 using backend.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
 
-public class PostController : IPostController
+public class PostController : ControllerBase, IPostController
 {
     private readonly IPostService _service;
 
@@ -12,7 +13,7 @@ public class PostController : IPostController
         _service = service;
     }
 
-    public IResult CreatePost(DTOCreatePost dto)
+    public IResult CreatePost(DTOCreatePost dto, string authorId)
     {
         var validator = new CreatePostValidator();
         var validationResult = validator.Validate(dto);
@@ -24,11 +25,11 @@ public class PostController : IPostController
             return Results.BadRequest(new { message = "❌ Validation failed", errors });
         }
 
-        var post = _service.Create(dto);
+        var post = _service.Create(dto, authorId);
 
         if (post == null)
         {
-            return Results.Conflict("It couldn't create the post, please try again");
+            return Results.Conflict("It couldn't create the post. Are you logged in?");
         }
 
         var result = new
@@ -38,6 +39,6 @@ public class PostController : IPostController
             post.Attachments,
         };
 
-        return Results.Created("/posts", result);
+        return Results.Created("/publish", result);
     }
 }

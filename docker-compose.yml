@@ -12,7 +12,7 @@ services:
       - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
-      - ./Config:/docker-entrypoint-initdb.d
+      - ./SQLs:/docker-entrypoint-initdb.d
 
 volumes:
   dbdata:
