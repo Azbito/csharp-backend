@@ -36,4 +36,18 @@ public class PostService : IPostService
 
         return post;
     }
+
+    public bool Delete(DTODeletePost dto, string authorId)
+    {
+        var user = _userRepository.GetById(authorId);
+
+        if (user == null)
+        {
+            return false;
+        }
+
+        _postRepository.Delete(dto.Id);
+
+        return true;
+    }
 }

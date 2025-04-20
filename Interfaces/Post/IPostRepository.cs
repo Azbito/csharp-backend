@@ -5,4 +5,5 @@ namespace backend.Interfaces;
 public interface IPostRepository
 {
     void Add(Post post);
+    void Delete(string id);
 }

@@ -30,5 +30,28 @@ public static class PostRoutes
                 }
             )
             .RequireAuthorization();
+
+        app.MapDelete(
+                "/postage",
+                (
+                    HttpContext http,
+                    [FromServices] PostController controller,
+                    [FromBody] DTODeletePost body
+                ) =>
+                {
+                    var userIdClaim =
+                        http.User.FindFirst("sub")?.Value ?? http.User.FindFirst("id")?.Value;
+
+                    if (userIdClaim == null)
+                    {
+                        return Results.Unauthorized();
+                    }
+
+                    var authorId = userIdClaim;
+
+                    return controller.DeletePost(body, authorId);
+                }
+            )
+            .RequireAuthorization();
     }
 }

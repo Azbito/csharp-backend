@@ -41,4 +41,26 @@ public class PostController : ControllerBase, IPostController
 
         return Results.Created("/publish", result);
     }
+
+    public IResult DeletePost(DTODeletePost dto, string authorId)
+    {
+        var validator = new DeletePostValidator();
+        var validationResult = validator.Validate(dto);
+
+        if (!validationResult.IsValid)
+        {
+            var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+
+            return Results.BadRequest(new { message = "❌ Validation failed", errors });
+        }
+
+        var post = _service.Delete(dto, authorId);
+
+        if (!post)
+        {
+            return Results.Conflict("It couldn't delete the post. Are you logged in?");
+        }
+
+        return Results.Ok();
+    }
 }

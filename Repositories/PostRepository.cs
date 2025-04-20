@@ -18,4 +18,15 @@ public class PostRepository : IPostRepository
         _context.Posts.Add(post);
         _context.SaveChanges();
     }
+
+    public void Delete(string id)
+    {
+        var post = _context.Posts.Find(id);
+
+        if (post != null)
+        {
+            _context.Posts.Remove(post);
+            _context.SaveChanges();
+        }
+    }
 }
